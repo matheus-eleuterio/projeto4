@@ -3,6 +3,10 @@
 #include <string.h>
 
 int main() {
+
+carregarClientes();
+carregarOperacoes();
+  
   int opcao;
 
   do {
