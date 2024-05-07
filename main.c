@@ -13,6 +13,8 @@ int main() {
     printf("5. Depósito\n");
     printf("6. Extrato\n");
     printf("7. Transferência entre contas\n");
+    printf("8. Salvar arquivo binário\n");
+    printf("9. Carregar arquivo binário\n");
     printf("0. Sair\n");
     printf("Escolha uma opção: ");
     scanf("%d", &opcao);
@@ -38,6 +40,12 @@ int main() {
       break;
     case 7:
       printf("Você selecionou a opção de fazer uma transferência.\n");
+      break;
+    case 8:
+      printf("Você selecionou a opção de salvar arquivo binário.\n");
+      break;
+    case 9:
+      printf("Você selecionou a opção de carregar arquivo binário.\n");
       break;
     case 0:
       printf("Você saiu do programa.\n");
