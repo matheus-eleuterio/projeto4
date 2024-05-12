@@ -26,6 +26,7 @@ int main() {
       break;
     case 2:
       printf("Você selecionou a opção de listar todas as contas.\n");
+      listar_contas();
       break;
     case 3:
       printf("Você selecionou a opção de deletar uma conta.\n");
