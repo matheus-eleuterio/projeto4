@@ -34,6 +34,7 @@ int main() {
       break;
     case 4:
       printf("Você selecionou a opção de debitar valor na conta.\n");
+      debitar();
       break;
     case 5:
       printf("Você selecionou a opção de fazer um depósito.\n");
