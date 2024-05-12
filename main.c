@@ -43,7 +43,7 @@ int main() {
       printf("Você selecionou a opção de fazer uma transferência.\n");
       break;
     case 8:
-      printf("Você selecionou a opção de carregar de um arquivo binário.\n");
+      printf("Você selecionou a opção carregar de um arquivo binário.\n");
       break;
     case 0:
       printf("Você saiu do programa.\n");
