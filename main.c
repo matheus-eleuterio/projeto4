@@ -3,6 +3,7 @@
 #include <string.h>
 
 int main() {
+
   int opcao;
 
   do {
@@ -13,21 +14,21 @@ int main() {
     printf("5. Depósito\n");
     printf("6. Extrato\n");
     printf("7. Transferência entre contas\n");
-    printf("8. Salvar arquivo binário\n");
-    printf("9. Carregar arquivo binário\n");
+    printf("8. Carregar Dados do banco\n");
     printf("0. Sair\n");
     printf("Escolha uma opção: ");
     scanf("%d", &opcao);
 
     switch (opcao) {
     case 1:
-      printf("Você selecionou a opção de criar conta.\n");
+      printf("Você selecionou a opção de criar uma nova conta.\n");
+      nova_conta();
       break;
     case 2:
-      printf("Você selecionou a opção de listar clientes.\n");
+      printf("Você selecionou a opção de listar todas as contas.\n");
       break;
     case 3:
-      printf("Você selecionou a opção de apagar um cliente.\n");
+      printf("Você selecionou a opção de apagar uma conta.\n");
       break;
     case 4:
       printf("Você selecionou a opção de debitar valor na conta.\n");
@@ -42,10 +43,7 @@ int main() {
       printf("Você selecionou a opção de fazer uma transferência.\n");
       break;
     case 8:
-      printf("Você selecionou a opção de salvar arquivo binário.\n");
-      break;
-    case 9:
-      printf("Você selecionou a opção de carregar arquivo binário.\n");
+      printf("Você selecionou a opção carregar de um arquivo binário.\n");
       break;
     case 0:
       printf("Você saiu do programa.\n");
