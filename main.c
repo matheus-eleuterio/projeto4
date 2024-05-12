@@ -9,7 +9,7 @@ int main() {
   do {
     printf("\n1. Nova conta\n");
     printf("2. Listar clientes\n");
-    printf("3. Apagar cliente\n");
+    printf("3. Deletar conta\n");
     printf("4. Débito\n");
     printf("5. Depósito\n");
     printf("6. Extrato\n");
@@ -28,7 +28,8 @@ int main() {
       printf("Você selecionou a opção de listar todas as contas.\n");
       break;
     case 3:
-      printf("Você selecionou a opção de apagar uma conta.\n");
+      printf("Você selecionou a opção de deletar uma conta.\n");
+      deletar_conta();
       break;
     case 4:
       printf("Você selecionou a opção de debitar valor na conta.\n");
