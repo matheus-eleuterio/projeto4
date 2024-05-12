@@ -21,12 +21,12 @@ typedef struct {
 
 dados_cliente clientes[MAX_CONTAS];
 operacao operacoes[MAX_OPERACOES];
-int qtd_clientes = 0;
+int qtd_contas = 0;
 int qtd_operacoes = 0;
 
 void nova_conta();
 void listar_clientes();
-void apagar_cliente();
+void deletar_conta();
 void debitar();
 void depositar();
 void extrato();

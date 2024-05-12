@@ -4,11 +4,11 @@
 
 dados_cliente clientes[MAX_CONTAS];
 operacao operacoes[MAX_OPERACOES];
-extern int qtd_clientes;
+extern int qtd_contas;
 extern int qtd_operacoes;
 
 void nova_conta() {
-  if (qtd_clientes >= MAX_CONTAS) {
+  if (qtd_contas >= MAX_CONTAS) {
     printf("Limite máximo de contas atingido!\n");
     return;
   }
@@ -25,6 +25,30 @@ void nova_conta() {
   printf("Senha: ");
   scanf("%s", novo.senha);
 
-  clientes[qtd_clientes++] = novo;
+  clientes[qtd_contas++] = novo;
   printf("Nova conta cadastrada com sucesso!\n");
+}
+
+void deletar_conta() {
+  char cpf[11];
+  printf("\nCPF referente a conta que deseja deletar: ");
+  scanf("%s", cpf);
+
+  int i, encontrado = 0;
+  for (i = 0; i < qtd_contas; i++) {
+    if (strcmp(clientes[i].cpf, cpf) == 0) {
+      encontrado = 1;
+      break;
+    }
+  }
+
+  if (encontrado) {
+    for (; i < qtd_contas - 1; i++) {
+      clientes[i] = clientes[i + 1];
+    }
+    qtd_contas--;
+    printf("Conta deletada com sucesso!\n");
+  } else {
+    printf("A conta não consta no nosso banco de dados.\n");
+  }
 }
