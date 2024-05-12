@@ -52,3 +52,12 @@ void deletar_conta() {
     printf("A conta não consta no nosso banco de dados.\n");
   }
 }
+
+void listar_contas() {
+  printf("\nLista de clientes com conta no banco:\n");
+  for (int i = 0; i < qtd_contas; i++) {
+    printf("\nNome: %s\nCPF: %s\nTipo de conta: %s\nSaldo: R$ %.2f\n",
+           clientes[i].nome, clientes[i].cpf,
+           clientes[i].tipo == COMUM ? "Comum" : "Plus", clientes[i].saldo);
+  }
+}

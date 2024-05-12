@@ -25,7 +25,7 @@ int qtd_contas = 0;
 int qtd_operacoes = 0;
 
 void nova_conta();
-void listar_clientes();
+void listar_contas();
 void deletar_conta();
 void debitar();
 void depositar();
