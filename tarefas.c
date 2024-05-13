@@ -141,3 +141,70 @@ void depositar() {
   op.valor = valor;
   operacoes[qtd_contas++] = op;
 }
+
+void transferencia() {
+  char conta_origem[11], senha_origem[10], conta_final[11];
+  double valor;
+  printf("Digite o CPF da conta de onde sairá o valor: ");
+  scanf("%s", conta_origem);
+  printf("Senha: ");
+  scanf("%s", senha_origem);
+
+  int i, j;
+  for (i = 0; i < qtd_contas; i++) {
+    if (strcmp(clientes[i].cpf, conta_origem) == 0 &&
+        strcmp(clientes[i].senha, senha_origem) == 0) {
+      break;
+    }
+  }
+
+  if (i == qtd_contas) {
+    printf("Dados inválidos! Verifique o CPF e senha digitado.\n");
+    return;
+  }
+
+  printf("\nDigite o CPF da conta para qual quer realizar a transferência: ");
+  scanf("%s", conta_final);
+
+  for (j = 0; j < qtd_contas; j++) {
+    if (strcmp(clientes[j].cpf, conta_final) == 0) {
+      break;
+    }
+  }
+
+  if (j == qtd_contas) {
+    printf("Não foi possível encontrar a conta de destino. Verifique o CPF inserido.\n");
+    return;
+  }
+
+  printf("Digite o valor que deseja transferir: R$ ");
+  scanf("%lf", &valor);
+
+  //verificando se tem saldo ou limite disponível
+  if (clientes[i].tipo == COMUM && valor > (clientes[i].saldo + 1000)) {
+    printf("Você não possui limite suficiente para esta operação.\n");
+    return;
+  } else if (clientes[i].tipo == PLUS && valor > (clientes[i].saldo + 5000)) {
+    printf("Você não possui limite suficiente para esta operação.\n");
+    return;
+  }
+  
+  //debitar + depositar
+  clientes[i].saldo -= valor;
+  clientes[j].saldo += valor;
+  printf("Transferencia realizada com sucesso.\n");
+
+  
+  operacao op_origem, op_final;
+  //origem
+  strcpy(op_origem.cpf, conta_origem);
+  op_origem.valor = -valor;
+  operacoes[qtd_operacoes++] = op_origem;
+  //final
+  strcpy(op_final.cpf, conta_final);
+  op_final.valor = valor;
+  operacoes[qtd_operacoes++] = op_final;
+}
+
+
+
