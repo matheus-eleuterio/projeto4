@@ -61,3 +61,53 @@ void listar_contas() {
            clientes[i].tipo == COMUM ? "Comum" : "Plus", clientes[i].saldo);
   }
 }
+
+void debitar() {
+  char cpf[11], senha[10];
+  double valor;
+  printf("\nCPF: ");
+  scanf("%s", cpf);
+  printf("Senha: ");
+  scanf("%s", senha);
+
+  int i;
+  for (i = 0; i < qtd_contas; i++) {
+    if (strcmp(clientes[i].cpf, cpf) == 0 &&
+        strcmp(clientes[i].senha, senha) == 0) {
+      break;
+    }
+  }
+
+  if (i == qtd_contas) {
+    printf("Dados inválidos! Verifique o CPF e senha digitados.\n");
+    return;
+  }
+
+  printf("Valor que deseja debitar da conta (R$): ");
+  scanf("%lf", &valor);
+
+  if (clientes[i].tipo == COMUM && valor > (clientes[i].saldo + 1000)) {
+    printf("Você não possui limite suficiente para esta operação.\n");
+    return;
+  } else if (clientes[i].tipo == PLUS && valor > (clientes[i].saldo + 5000)) {
+    printf("Você não possui limite suficiente para esta operação.\n");
+    return;
+  }
+
+  //taxa
+  double taxa;
+  if (clientes[i].tipo == COMUM) {
+      taxa = 0.05;
+  } else {
+      taxa = 0.03;
+  }
+  double valor_atual = valor + (valor * taxa);
+  clientes[i].saldo = clientes[i].saldo - valor_atual;
+  printf("Debito realizado com sucesso.\n");
+
+  //salva op
+  operacao op;
+  strcpy(op.cpf, cpf);
+  op.valor = -valor_atual;
+  operacoes[qtd_operacoes++] = op;
+}
