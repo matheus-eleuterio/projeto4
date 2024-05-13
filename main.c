@@ -38,6 +38,7 @@ int main() {
       break;
     case 5:
       printf("Você selecionou a opção de fazer um depósito.\n");
+      depositar();
       break;
     case 6:
       printf("Você selecionou a opção de conferir extrato.\n");
