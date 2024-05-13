@@ -17,6 +17,7 @@ typedef struct {
 typedef struct {
     char cpf[11];
     double valor;
+    char descricao[100];
 } operacao;
 
 dados_cliente clientes[MAX_CONTAS];
