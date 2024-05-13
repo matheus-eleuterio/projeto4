@@ -94,20 +94,50 @@ void debitar() {
     return;
   }
 
-  //taxa
+  // taxa
   double taxa;
   if (clientes[i].tipo == COMUM) {
-      taxa = 0.05;
+    taxa = 0.05;
   } else {
-      taxa = 0.03;
+    taxa = 0.03;
   }
   double valor_atual = valor + (valor * taxa);
   clientes[i].saldo = clientes[i].saldo - valor_atual;
   printf("Debito realizado com sucesso.\n");
 
-  //salva op
+  // salva op
   operacao op;
   strcpy(op.cpf, cpf);
   op.valor = -valor_atual;
   operacoes[qtd_operacoes++] = op;
+}
+
+void depositar() {
+  char cpf[11];
+  double valor;
+  printf("CPF: ");
+  scanf("%s", cpf);
+
+  int i;
+  for (i = 0; i < qtd_contas; i++) {
+    if (strcmp(clientes[i].cpf, cpf) == 0) {
+      break;
+    }
+  }
+
+  if (i == qtd_contas) {
+    printf("Não foi possível localizar a conta. Verifique o CPF digitado.\n");
+    return;
+  }
+
+  printf("Valor que deseja depositar na conta: ");
+  scanf("%lf", &valor);
+
+  clientes[i].saldo += valor;
+  printf("Deposito realizado com sucesso.\n");
+
+  operacao op;
+  strcpy(op.cpf, cpf);
+  op.valor = valor;
+  operacoes[qtd_contas++] = op;
 }
