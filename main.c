@@ -42,6 +42,7 @@ int main() {
       break;
     case 6:
       printf("Você selecionou a opção de conferir extrato.\n");
+      extrato();
       break;
     case 7:
       printf("Você selecionou a opção de fazer uma transferência.\n");
