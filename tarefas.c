@@ -7,6 +7,7 @@ operacao operacoes[MAX_OPERACOES];
 extern int qtd_contas;
 extern int qtd_operacoes;
 
+// >>>>>>>>>>>>>>>>>>>>> Função Nova Conta <<<<<<<<<<<<<<<<<<<<<<<<
 void nova_conta() {
   if (qtd_contas >= MAX_CONTAS) {
     printf("Limite máximo de contas atingido!\n");
@@ -29,6 +30,7 @@ void nova_conta() {
   printf("Nova conta cadastrada com sucesso!\n");
 }
 
+// >>>>>>>>>>>>>>>>>>>>> Função Deletar Contas <<<<<<<<<<<<<<<<<<<<<<<<
 void deletar_conta() {
   char cpf[11];
   printf("\nCPF referente a conta que deseja deletar: ");
@@ -53,6 +55,7 @@ void deletar_conta() {
   }
 }
 
+// >>>>>>>>>>>>>>>>>>>>> Função Listar <<<<<<<<<<<<<<<<<<<<<<<<
 void listar_contas() {
   printf("\nLista de clientes com conta no banco:\n");
   for (int i = 0; i < qtd_contas; i++) {
@@ -62,6 +65,7 @@ void listar_contas() {
   }
 }
 
+// >>>>>>>>>>>>>>>>>>>>> Função Debitar <<<<<<<<<<<<<<<<<<<<<<<<
 void debitar() {
   char cpf[11], senha[10];
   double valor;
@@ -101,17 +105,21 @@ void debitar() {
   } else {
     taxa = 0.03;
   }
+  double valor_sem_taxa = valor;
   double valor_atual = valor + (valor * taxa);
   clientes[i].saldo = clientes[i].saldo - valor_atual;
-  printf("Debito realizado com sucesso.\n");
+  printf("Débito realizado com sucesso.\n");
 
   // salva op
   operacao op;
   strcpy(op.cpf, cpf);
   op.valor = -valor_atual;
+  sprintf(op.descricao, "Saque efetuado no valor de R$%.2f | Taxa da operação: %.0f%%",
+      valor_sem_taxa, taxa * 100, clientes[i].tipo == COMUM ? "Comum" : "Plus");
   operacoes[qtd_operacoes++] = op;
 }
 
+// >>>>>>>>>>>>>>>>>>>>> Função Depositar <<<<<<<<<<<<<<<<<<<<<<<<
 void depositar() {
   char cpf[11];
   double valor;
@@ -134,18 +142,20 @@ void depositar() {
   scanf("%lf", &valor);
 
   clientes[i].saldo += valor;
-  printf("Deposito realizado com sucesso.\n");
+  printf("Depósito realizado com sucesso.\n");
 
   operacao op;
   strcpy(op.cpf, cpf);
   op.valor = valor;
-  operacoes[qtd_contas++] = op;
+  sprintf(op.descricao, "Depósito recebido");
+  operacoes[qtd_operacoes++] = op;
 }
 
+// >>>>>>>>>>>>>>>>>>>>> Função Transferência <<<<<<<<<<<<<<<<<<<<<<<<
 void transferencia() {
   char conta_origem[11], senha_origem[10], conta_final[11];
   double valor;
-  printf("Digite o CPF da conta de onde sairá o valor: ");
+  printf("\nDigite o CPF da conta de onde sairá o valor: ");
   scanf("%s", conta_origem);
   printf("Senha: ");
   scanf("%s", senha_origem);
@@ -163,7 +173,7 @@ void transferencia() {
     return;
   }
 
-  printf("\nDigite o CPF da conta para qual quer realizar a transferência: ");
+  printf("Digite o CPF da conta para qual quer realizar a transferência: ");
   scanf("%s", conta_final);
 
   for (j = 0; j < qtd_contas; j++) {
@@ -173,14 +183,15 @@ void transferencia() {
   }
 
   if (j == qtd_contas) {
-    printf("Não foi possível encontrar a conta de destino. Verifique o CPF inserido.\n");
+    printf("Não foi possível encontrar a conta de destino. Verifique o CPF "
+           "inserido.\n");
     return;
   }
 
   printf("Digite o valor que deseja transferir: R$ ");
   scanf("%lf", &valor);
 
-  //verificando se tem saldo ou limite disponível
+  // verificando se tem saldo ou limite disponível
   if (clientes[i].tipo == COMUM && valor > (clientes[i].saldo + 1000)) {
     printf("Você não possui limite suficiente para esta operação.\n");
     return;
@@ -188,23 +199,91 @@ void transferencia() {
     printf("Você não possui limite suficiente para esta operação.\n");
     return;
   }
-  
-  //debitar + depositar
+
+  // debitar + depositar
   clientes[i].saldo -= valor;
   clientes[j].saldo += valor;
   printf("Transferencia realizada com sucesso.\n");
 
-  
   operacao op_origem, op_final;
-  //origem
+  // origem
   strcpy(op_origem.cpf, conta_origem);
   op_origem.valor = -valor;
+  sprintf(op_origem.descricao, "Transferência para a conta: %s (CPF: %s)",
+          clientes[j].nome, clientes[j].cpf);
   operacoes[qtd_operacoes++] = op_origem;
-  //final
+  // final
   strcpy(op_final.cpf, conta_final);
   op_final.valor = valor;
+  sprintf(op_final.descricao, "Transferência recebida da conta: %s (CPF: %s)",
+          clientes[i].nome, clientes[i].cpf);
   operacoes[qtd_operacoes++] = op_final;
 }
 
+// >>>>>>>>>>>>>>>>>>>>> Função Extrato <<<<<<<<<<<<<<<<<<<<<<<<
+void extrato() {
+  char cpf[11], senha[10];
+  printf("\nDigite seu CPF: ");
+  scanf("%s", cpf);
+  printf("Digite sua senha: ");
+  scanf("%s", senha);
 
+  int i;
+  for (i = 0; i < qtd_contas; i++) {
+    if (strcmp(clientes[i].cpf, cpf) == 0 &&
+        strcmp(clientes[i].senha, senha) == 0) {
+      break;
+    }
+  }
 
+  if (i == qtd_contas) {
+    printf("Dados inválidos! Verifique o CPF e senha digitados.\n");
+    return;
+  }
+
+  char nome_arquivo[40];
+  sprintf(nome_arquivo, "Extrato Bancário: %s.txt", clientes[i].nome);
+  FILE *arquivo = fopen(nome_arquivo, "w");
+  if (arquivo == NULL) {
+    printf("Erro ao criar o arquivo de extrato.\n");
+    return;
+  }
+
+  double saldo_atual = clientes[i].saldo;
+  fprintf(arquivo, "Extrato Bancário\n");
+  fprintf(arquivo, "Nome: %s\nCPF: %s\n", clientes[i].nome, clientes[i].cpf);
+  fprintf(arquivo, "Tipo de conta: %s\n", clientes[i].tipo == COMUM ? "Comum" : "Plus");
+  fprintf(arquivo, "Saldo Atual: R$ %.2f\n", saldo_atual);
+  fprintf(arquivo, "\nHistórico de Operações:\n");
+
+  // imprimir ops
+  for (int j = 0; j < qtd_operacoes; j++) {
+    if (strcmp(operacoes[j].cpf, cpf) == 0) {
+      if (operacoes[j].valor < 0) {
+        fprintf(arquivo, "Débito: R$%.2f - %s\n", operacoes[j].valor,
+                operacoes[j].descricao);
+        saldo_atual -= operacoes[j].valor;
+      } else {
+        fprintf(arquivo, "Crédito: R$%.2f - %s\n", operacoes[j].valor,
+                operacoes[j].descricao);
+        saldo_atual += operacoes[j].valor;
+      }
+    }
+  }
+
+  // for (int k = 0; k < qtd_operacoes; k++) {
+  //   if (strcmp(operacoes[k].cpf, cpf) == 0 && operacoes[k].valor > 0) {
+  //     fprintf(arquivo, "Deposito: R$ %.2f - %s\n", operacoes[k].valor,
+  //             operacoes[k].descricao);
+  //     saldo_atual += operacoes[k].valor;
+  //   }
+  // }
+
+  fclose(arquivo);
+  printf("Operação realizada com sucesso. Consulte o extrato no arquivo txt "
+         "gerado.\n");
+  printf("\nTecle ENTER para voltar ao menu principal.\n");
+  while (getchar() != '\n')
+    ;
+  getchar();
+}
