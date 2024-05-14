@@ -3,7 +3,7 @@
 #include <string.h>
 
 int main() {
-
+  carregar_dados();
   int opcao;
 
   do {
@@ -14,7 +14,7 @@ int main() {
     printf("5. Depósito\n");
     printf("6. Extrato\n");
     printf("7. Transferência entre contas\n");
-    printf("8. Carregar Dados do banco\n");
+    printf("8. Salvar dados do banco\n");
     printf("0. Sair\n");
     printf("Escolha uma opção: ");
     scanf("%d", &opcao);
@@ -50,6 +50,7 @@ int main() {
       break;
     case 8:
       printf("Você selecionou a opção carregar de um arquivo binário.\n");
+      carregar_dados();
       break;
     case 0:
       printf("Você saiu do programa.\n");

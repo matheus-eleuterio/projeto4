@@ -28,6 +28,7 @@ void nova_conta() {
 
   clientes[qtd_contas++] = novo;
   printf("Nova conta cadastrada com sucesso!\n");
+  salvar_dados(); // salva no arq binário
 }
 
 // >>>>>>>>>>>>>>>>>>>>> Função Deletar Contas <<<<<<<<<<<<<<<<<<<<<<<<
@@ -53,6 +54,7 @@ void deletar_conta() {
   } else {
     printf("A conta não consta no nosso banco de dados.\n");
   }
+  salvar_dados(); // salva no arq binário
 }
 
 // >>>>>>>>>>>>>>>>>>>>> Função Listar <<<<<<<<<<<<<<<<<<<<<<<<
@@ -114,9 +116,12 @@ void debitar() {
   operacao op;
   strcpy(op.cpf, cpf);
   op.valor = -valor_atual;
-  sprintf(op.descricao, "Saque efetuado no valor de R$%.2f | Taxa da operação: %.0f%%",
-      valor_sem_taxa, taxa * 100, clientes[i].tipo == COMUM ? "Comum" : "Plus");
+  sprintf(op.descricao,
+          "Saque efetuado no valor de R$%.2f | Taxa da operação: %.0f%%",
+          valor_sem_taxa, taxa * 100,
+          clientes[i].tipo == COMUM ? "Comum" : "Plus");
   operacoes[qtd_operacoes++] = op;
+  salvar_dados(); // salva no arq binário
 }
 
 // >>>>>>>>>>>>>>>>>>>>> Função Depositar <<<<<<<<<<<<<<<<<<<<<<<<
@@ -149,6 +154,7 @@ void depositar() {
   op.valor = valor;
   sprintf(op.descricao, "Depósito recebido");
   operacoes[qtd_operacoes++] = op;
+  salvar_dados(); // salva no arq binário
 }
 
 // >>>>>>>>>>>>>>>>>>>>> Função Transferência <<<<<<<<<<<<<<<<<<<<<<<<
@@ -218,6 +224,7 @@ void transferencia() {
   sprintf(op_final.descricao, "Transferência recebida da conta: %s (CPF: %s)",
           clientes[i].nome, clientes[i].cpf);
   operacoes[qtd_operacoes++] = op_final;
+  salvar_dados(); // salva no arq binário
 }
 
 // >>>>>>>>>>>>>>>>>>>>> Função Extrato <<<<<<<<<<<<<<<<<<<<<<<<
@@ -252,7 +259,8 @@ void extrato() {
   double saldo_atual = clientes[i].saldo;
   fprintf(arquivo, "Extrato Bancário\n");
   fprintf(arquivo, "Nome: %s\nCPF: %s\n", clientes[i].nome, clientes[i].cpf);
-  fprintf(arquivo, "Tipo de conta: %s\n", clientes[i].tipo == COMUM ? "Comum" : "Plus");
+  fprintf(arquivo, "Tipo de conta: %s\n",
+          clientes[i].tipo == COMUM ? "Comum" : "Plus");
   fprintf(arquivo, "Saldo Atual: R$ %.2f\n", saldo_atual);
   fprintf(arquivo, "\nHistórico de Operações:\n");
 
@@ -286,4 +294,38 @@ void extrato() {
   while (getchar() != '\n')
     ;
   getchar();
+}
+
+// >>>>>>>>>>>>>>>>>>>>> Função salvar dados <<<<<<<<<<<<<<<<<<<<<<<<
+void salvar_dados() {
+  FILE *arquivo = fopen("dados_banco.bin", "wb");
+  if (arquivo == NULL) {
+    printf("Erro ao abrir o arquivo para salvar os dados.\n");
+    return;
+  }
+
+  fwrite(&qtd_contas, sizeof(int), 1, arquivo);
+  fwrite(&qtd_operacoes, sizeof(int), 1, arquivo);
+  fwrite(clientes, sizeof(dados_cliente), qtd_contas, arquivo);
+  fwrite(operacoes, sizeof(operacao), qtd_operacoes, arquivo);
+  fclose(arquivo);
+  // printf("Dados salvos com sucesso.\n"); ------ Não precisa dar retorno ao
+  // usuario
+}
+
+// >>>>>>>>>>>>>>>>>>>>> Função carregar dados <<<<<<<<<<<<<<<<<<<<<<<<
+void carregar_dados() {
+  FILE *arquivo = fopen("dados_banco.bin", "rb");
+  if (arquivo == NULL) {
+    printf("Arquivo de dados não encontrado. Utilize a opção 8 para carregar "
+           "dados.\n");
+    return;
+  }
+
+  fread(&qtd_contas, sizeof(int), 1, arquivo);
+  fread(&qtd_operacoes, sizeof(int), 1, arquivo);
+  fread(clientes, sizeof(dados_cliente), qtd_contas, arquivo);
+  fread(operacoes, sizeof(operacao), qtd_operacoes, arquivo);
+  fclose(arquivo);
+  printf("Dados carregados com sucesso.\n");
 }
