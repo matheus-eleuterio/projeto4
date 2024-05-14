@@ -7,17 +7,17 @@
 typedef enum { COMUM, PLUS } tipo_conta;
 
 typedef struct {
-    char nome[40];
-    char cpf[11]; 
-    tipo_conta tipo;
-    double saldo;
-    char senha[10];
+  char nome[40];
+  char cpf[11];
+  tipo_conta tipo;
+  double saldo;
+  char senha[10];
 } dados_cliente;
 
 typedef struct {
-    char cpf[11];
-    double valor;
-    char descricao[100];
+  char cpf[11];
+  double valor;
+  char descricao[100];
 } operacao;
 
 dados_cliente clientes[MAX_CONTAS];
@@ -32,6 +32,7 @@ void debitar();
 void depositar();
 void extrato();
 void transferencia();
+void salvar_dados();
 void carregar_dados();
 
 #endif
