@@ -54,7 +54,7 @@ void deletar_conta() {
   } else {
     printf("A conta não consta no nosso banco de dados.\n");
   }
-  salvar_dados(); // salva no arq binário
+  salvar_dados();
 }
 
 // >>>>>>>>>>>>>>>>>>>>> Função Listar <<<<<<<<<<<<<<<<<<<<<<<<
@@ -71,9 +71,9 @@ void listar_contas() {
 void debitar() {
   char cpf[11], senha[10];
   double valor;
-  printf("\nCPF: ");
+  printf("\nDigite seu CPF: ");
   scanf("%s", cpf);
-  printf("Senha: ");
+  printf("Digite sua senha: ");
   scanf("%s", senha);
 
   int i;
@@ -89,7 +89,7 @@ void debitar() {
     return;
   }
 
-  printf("Valor que deseja debitar da conta (R$): ");
+  printf("Valor que deseja debitar da conta: R$ ");
   scanf("%lf", &valor);
 
   if (clientes[i].tipo == COMUM && valor > (clientes[i].saldo + 1000)) {
@@ -121,14 +121,14 @@ void debitar() {
           valor_sem_taxa, taxa * 100,
           clientes[i].tipo == COMUM ? "Comum" : "Plus");
   operacoes[qtd_operacoes++] = op;
-  salvar_dados(); // salva no arq binário
+  salvar_dados();
 }
 
 // >>>>>>>>>>>>>>>>>>>>> Função Depositar <<<<<<<<<<<<<<<<<<<<<<<<
 void depositar() {
   char cpf[11];
   double valor;
-  printf("CPF: ");
+  printf("\nDigite seu CPF: ");
   scanf("%s", cpf);
 
   int i;
@@ -154,16 +154,16 @@ void depositar() {
   op.valor = valor;
   sprintf(op.descricao, "Depósito recebido");
   operacoes[qtd_operacoes++] = op;
-  salvar_dados(); // salva no arq binário
+  salvar_dados(); 
 }
 
 // >>>>>>>>>>>>>>>>>>>>> Função Transferência <<<<<<<<<<<<<<<<<<<<<<<<
 void transferencia() {
   char conta_origem[11], senha_origem[10], conta_final[11];
   double valor;
-  printf("\nDigite o CPF da conta de onde sairá o valor: ");
+  printf("\nDigite seu CPF: ");
   scanf("%s", conta_origem);
-  printf("Senha: ");
+  printf("Digite sua senha: ");
   scanf("%s", senha_origem);
 
   int i, j;
@@ -179,7 +179,7 @@ void transferencia() {
     return;
   }
 
-  printf("Digite o CPF da conta para qual quer realizar a transferência: ");
+  printf("Digite o CPF da conta de destino: ");
   scanf("%s", conta_final);
 
   for (j = 0; j < qtd_contas; j++) {
@@ -224,7 +224,7 @@ void transferencia() {
   sprintf(op_final.descricao, "Transferência recebida da conta: %s (CPF: %s)",
           clientes[i].nome, clientes[i].cpf);
   operacoes[qtd_operacoes++] = op_final;
-  salvar_dados(); // salva no arq binário
+  salvar_dados(); 
 }
 
 // >>>>>>>>>>>>>>>>>>>>> Função Extrato <<<<<<<<<<<<<<<<<<<<<<<<
@@ -279,14 +279,6 @@ void extrato() {
     }
   }
 
-  // for (int k = 0; k < qtd_operacoes; k++) {
-  //   if (strcmp(operacoes[k].cpf, cpf) == 0 && operacoes[k].valor > 0) {
-  //     fprintf(arquivo, "Deposito: R$ %.2f - %s\n", operacoes[k].valor,
-  //             operacoes[k].descricao);
-  //     saldo_atual += operacoes[k].valor;
-  //   }
-  // }
-
   fclose(arquivo);
   printf("Operação realizada com sucesso. Consulte o extrato no arquivo txt "
          "gerado.\n");
@@ -298,7 +290,7 @@ void extrato() {
 
 // >>>>>>>>>>>>>>>>>>>>> Função salvar dados <<<<<<<<<<<<<<<<<<<<<<<<
 void salvar_dados() {
-  FILE *arquivo = fopen("dados_banco.bin", "wb");
+  FILE *arquivo = fopen("dados_clientes.bin", "wb");
   if (arquivo == NULL) {
     printf("Erro ao abrir o arquivo para salvar os dados.\n");
     return;
@@ -309,16 +301,13 @@ void salvar_dados() {
   fwrite(clientes, sizeof(dados_cliente), qtd_contas, arquivo);
   fwrite(operacoes, sizeof(operacao), qtd_operacoes, arquivo);
   fclose(arquivo);
-  // printf("Dados salvos com sucesso.\n"); ------ Não precisa dar retorno ao
-  // usuario
 }
 
 // >>>>>>>>>>>>>>>>>>>>> Função carregar dados <<<<<<<<<<<<<<<<<<<<<<<<
 void carregar_dados() {
-  FILE *arquivo = fopen("dados_banco.bin", "rb");
+  FILE *arquivo = fopen("dados_clientes.bin", "rb");
   if (arquivo == NULL) {
-    printf("Arquivo de dados não encontrado. Utilize a opção 8 para carregar "
-           "dados.\n");
+    printf("Arquivo de dados não encontrado. O programa vai gerar um novo arquivo de dados após a primeira operação.\n");
     return;
   }
 

@@ -20,6 +20,18 @@ typedef struct {
   char descricao[100];
 } operacao;
 
+typedef enum {
+  OK,
+  MAX_CLIENTES,
+  SEM_CLIENTES,
+  NAO_ENCONTRADO,
+  ABRIR,
+  FECHAR,
+  ESCREVER,
+  LER
+} ERROS;
+
+
 dados_cliente clientes[MAX_CONTAS];
 operacao operacoes[MAX_OPERACOES];
 int qtd_contas = 0;
@@ -34,5 +46,7 @@ void extrato();
 void transferencia();
 void salvar_dados();
 void carregar_dados();
+
+void clearBuffer();
 
 #endif
